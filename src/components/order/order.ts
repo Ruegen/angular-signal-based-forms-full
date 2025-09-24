@@ -1,5 +1,7 @@
 import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
-import { form, Control, required, SchemaOrSchemaFn,  min } from '@angular/forms/signals';
+import { form, Control, required, SchemaOrSchemaFn,  min, FieldPath, validate, customError, ChildFieldContext, FieldValidationResult } from '@angular/forms/signals';
+import { validateDateRange, validateNotes } from './validations';
+import { DatePipe } from '@angular/common';
 
 interface IOrder {
     orderNumber: number;
@@ -14,12 +16,15 @@ interface IOrder {
 const orderschema: SchemaOrSchemaFn<IOrder> = (path) => {
     required(path.customerName, {message: 'Customer name is required'});
     min(path.quantity, 1, {message: 'Quantity must be at least 1'});
+    validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
+    validateNotes(path.notes, {minLength: 10, maxLength: 200});
 }
+
 @Component({
   selector: 'app-order',
   templateUrl: './order.html',
   styleUrl: './order.css',
-  imports: [Control],
+  imports: [Control, DatePipe],
 })
 class OrderComponent implements OnInit {
   customer = input({name: '', email: ''});
@@ -50,6 +55,11 @@ class OrderComponent implements OnInit {
 
   public submit($event: SubmitEvent) {
     $event.preventDefault();
+
+    if(this.orderForm().invalid()) {
+      return alert('Form is invalid');
+    }
+
     alert(JSON.stringify(this.payload(), null, 2));
   }
 }

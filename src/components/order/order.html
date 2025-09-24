@@ -16,6 +16,15 @@
   <fieldset>
     <label for="delivery-date">Delivery Date: </label>
     <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" />
+      @for (error of orderForm.deliveryDate().errors(); track error) {
+        @if(error.kind === 'validateDateRange') {
+          <p class="error">Delivery date is required</p>
+        } @else if (error.kind === 'dateTooEarly') {
+        <p class="error">Delivery date must be after</p>
+        } @else if (error.kind === 'dateTooLate') {
+        <p class="error">Delivery date must be within the next 30 days</p>
+        }
+      }
   </fieldset>
   <fieldset>
     <label for="notes">Notes: </label>
