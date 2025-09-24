@@ -44,6 +44,8 @@
 	color: red;
 	font-size: 0.9em;
 }
-.order-form .loading-indicator {
-	padding-left: 0.5em;
+.order-form .submit-area {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1em;
 }

@@ -5,7 +5,7 @@
   <p><strong>Product:</strong> {{order().product}}</p>
   <fieldset>
     <label for="quantity">Quantity: </label>
-    <input id="quantity" type="number" [control]="orderForm.quantity" />
+    <input id="quantity" type="number" [control]="orderForm.quantity" [disabled]="disabled()" />
   </fieldset>
 
   @for (error of orderForm.quantity().errors(); track error) {
@@ -18,7 +18,7 @@
 
   <fieldset>
     <label for="delivery-date">Delivery Date: </label>
-    <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" />
+    <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" [disabled]="disabled()" />
   </fieldset>
 
    @for (error of orderForm.deliveryDate().errors(); track error) {
@@ -27,11 +27,13 @@
 
   <fieldset>
     <label for="notes">Notes: </label>
-    <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>
+    <textarea id="notes" cols="30" [control]="orderForm.notes" [disabled]="disabled()"></textarea>
   </fieldset>
 
-  <button type="submit" [disabled]="orderForm().submitting()">Submit Order</button>
-  @if (orderForm().submitting()) {
-    <span class="loading-indicator">Sending order please wait...</span>
-  }
+  <div class="submit-area">
+    @if (orderForm().submitting()) {
+      <span>Sending order please wait...</span>
+    }
+    <button type="submit" [disabled]="disabled()">Submit Order</button>
+  </div>
 </form>

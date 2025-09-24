@@ -34,6 +34,7 @@ class OrderComponent implements OnInit {
   orderForm = form<IOrder>(this.order, orderschemaFn);
 
   payload = computed(() => extractOrder(this.order()));
+  disabled = computed(() => this.orderForm().submitting());
 
   public ngOnInit() {
     this.order.update((order) => ({
