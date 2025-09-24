@@ -1,24 +1,15 @@
 import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
-import { form, Control, required, SchemaOrSchemaFn,  min } from '@angular/forms/signals';
+import { form, Control, required, SchemaOrSchemaFn,  min, submit, TreeValidationResult, schema, apply } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
+import { IOrder } from './interfaces';
+import { customerNameSchema } from './schemas';
 
-interface IOrder {
-    orderNumber: number;
-    customerName: string;
-    product: string;
-    productId: number;
-    quantity: number;
-    deliveryDate: string;
-    notes: string;
-}
-
-const orderschema: SchemaOrSchemaFn<IOrder> = (path) => {
-    required(path.customerName, {message: 'Customer name is required'});
+const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
+    apply(path.customerName, customerNameSchema);
     min(path.quantity, 1, {message: 'Quantity must be at least 1'});
     validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
     validateNotes(path.notes, {minLength: 10, maxLength: 200});
 }
-
 @Component({
   selector: 'app-order',
   templateUrl: './order.html',
@@ -39,7 +30,7 @@ class OrderComponent implements OnInit {
     notes: '',
   });
 
-  orderForm = form(this.order, orderschema);
+  orderForm = form<IOrder>(this.order, orderschemaFn);
 
   payload = computed(() => {
     const {deliveryDate, notes, quantity, productId} = this.order();
@@ -52,14 +43,16 @@ class OrderComponent implements OnInit {
     })
   }
 
-  public submit($event: SubmitEvent) {
-    $event.preventDefault();
-
-    if(this.orderForm().invalid()) {
-      return alert('Form is invalid');
-    }
-
-    alert(JSON.stringify(this.payload(), null, 2));
+  public onSubmit() {
+    submit(this.orderForm, async (form): Promise<TreeValidationResult> => {
+      try {
+        await fakeHttpRequest(this.payload());
+        form().reset();
+        return undefined;
+      } catch (error) {
+        return [{ kind: 'server', message: 'Submission failed, please try again later.' }];
+      }
+    })
   }
 }
 
