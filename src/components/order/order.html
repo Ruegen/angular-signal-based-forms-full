@@ -1,5 +1,18 @@
-<form>
-  <p>Order Number {{order().orderNumber}}</p>
-  <p>{{order().product}}</p>
-  <label>Quanity <input type="number" [control]="form.quantity" /></label>
+<form class="order-form" (submit)="submit($event)">
+  <p>Order Number: {{order().orderNumber}}</p>
+  <p>Product: {{order().product}}</p>
+  <fieldset>
+    <label for="quantity">Quantity: </label>
+    <input id="quantity" type="number" [control]="form.quantity" />
+  </fieldset>
+  <fieldset>
+    <label for="delivery-date">Delivery Date: </label>
+    <input id="delivery-date" type="date" [control]="form.deliveryDate" />
+  </fieldset>
+  <fieldset>
+    <label for="notes">Notes: </label>
+    <textarea id="notes" cols="30" [control]="form.notes"></textarea>
+  </fieldset>
+
+  <button type="submit">Submit Order</button>
 </form>

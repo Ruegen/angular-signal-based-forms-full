@@ -1,0 +1,41 @@
+.order-form {
+	max-width: 40em;
+	border: 1px solid #ccc;
+	border-radius: 0.5em;
+	padding: 1em;
+	margin: 1em auto;
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+}
+
+.order-form input {
+	margin-left: 0.5em;
+	margin-bottom: 1em;
+	padding: 0.2em;
+	border: 1px solid #ccc;
+	border-radius: 0.3em;
+}
+
+.order-form textarea {
+	margin-left: 0.5em;
+	margin-bottom: 1em;
+	padding: 0.2em;
+	border: 1px solid #ccc;
+	border-radius: 0.3em;
+	width: 100%;
+	height: 4em;
+	resize: vertical;
+}
+
+.order-form label {
+	font-weight: bold;
+	display: flex;
+}
+
+.order-form fieldset {
+	border: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 1em;
+}

@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { form, Control } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.html',
+  styleUrl: './order.css',
   imports: [Control],
 })
 class OrderComponent {
@@ -18,6 +19,16 @@ class OrderComponent {
   });
 
   form = form(this.order);
+  
+  payload = computed(() => {
+    const {deliveryDate, notes, product, quantity} = this.order();
+    return {date: deliveryDate, notes, product, quantity};
+  });
+
+  public submit($event: SubmitEvent) {
+    $event.preventDefault();
+    console.log('Order submitted:', this.payload());
+  }
 }
 
 export { OrderComponent };
