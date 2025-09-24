@@ -1,10 +1,14 @@
 <form class="order-form" (submit)="onSubmit($event)">
+  @if(orderForm().submitting()) {
+    <p>Submitting...</p>
+  } 
   <p>Order Number: {{order().orderNumber}} - {{order().customerName}}</p>
   <p>Product: {{order().product}}</p>
   <fieldset>
     <label for="quantity">Quantity: </label>
     <input id="quantity" type="number" [control]="orderForm.quantity" />
   </fieldset>
+
   @for (error of orderForm.quantity().errors(); track error) {
     @if(error.kind === 'required') {
       <p class="error">Quantity is required</p>
@@ -26,7 +30,7 @@
         }
       }
   </fieldset>
-  
+
   <fieldset>
     <label for="notes">Notes: </label>
     <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>

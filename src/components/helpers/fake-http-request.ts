@@ -10,3 +10,5 @@ function fakeHttpRequest(payload: any, fail = false) {
     }, 1000);
   });
 }
+
+export { fakeHttpRequest };
