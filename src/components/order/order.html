@@ -1,5 +1,5 @@
 <form class="order-form" (submit)="submit($event)">
-  <p>Order Number: {{order().orderNumber}}</p>
+  <p>Order Number: {{order().orderNumber}} - {{order().customerName}}</p>
   <p>Product: {{order().product}}</p>
   <fieldset>
     <label for="quantity">Quantity: </label>

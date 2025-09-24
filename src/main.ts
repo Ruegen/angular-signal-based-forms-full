@@ -5,10 +5,12 @@ import { OrderComponent } from './components/order/order';
 @Component({
   selector: 'app-root',
   template: `
-    <app-order />
+    <app-order [customer]="customer" />
   `,
   imports: [OrderComponent],
 })
-export class App {}
+export class App {
+  customer = { name: 'Alice', email: 'alice@example.com' };
+}
 
 bootstrapApplication(App);

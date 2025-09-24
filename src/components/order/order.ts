@@ -1,5 +1,5 @@
-import { Component, signal, computed } from '@angular/core';
-import { form, Control } from '@angular/forms/signals';
+import { Component, signal, computed, input, OnInit } from '@angular/core';
+import { form, Control, required } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-order',
@@ -7,7 +7,8 @@ import { form, Control } from '@angular/forms/signals';
   styleUrl: './order.css',
   imports: [Control],
 })
-class OrderComponent {
+class OrderComponent implements OnInit {
+  customer = input({name: '', email: ''});
   name = 'Angular';
   order = signal({
     orderNumber: 1,
@@ -18,12 +19,20 @@ class OrderComponent {
     notes: '',
   });
 
-  form = form(this.order);
-  
+  form = form(this.order, (path) => {
+    required(path.customerName, {message: 'Customer name is required'});
+  });
+
   payload = computed(() => {
     const {deliveryDate, notes, product, quantity} = this.order();
     return {date: deliveryDate, notes, product, quantity};
   });
+
+  public ngOnInit() {
+    this.order.update((o) => {
+      return {...o, customerName: this.customer().name};
+    })
+  }
 
   public submit($event: SubmitEvent) {
     $event.preventDefault();
