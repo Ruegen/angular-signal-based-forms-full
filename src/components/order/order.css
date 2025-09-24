@@ -39,3 +39,8 @@
 	display: flex;
 	gap: 1em;
 }
+.order-form .error {
+	margin-top: -0.5em;
+	color: red;
+	font-size: 0.9em;
+}
