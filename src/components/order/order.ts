@@ -61,9 +61,12 @@ class OrderComponent implements OnInit {
       try {
         await fakeHttpRequest(this.payload());
         form().reset();
-        return undefined;
-      } catch (error) {
-        return [{ kind: 'server', message: 'Submission failed, please try again later.' }];
+        return;
+      } catch (_error) {
+        const errors: TreeValidationResult = [
+          { kind: 'server', message: 'Submission failed, please try again later.' }
+        ];
+        return errors;
       }
     })
   }
@@ -72,9 +75,12 @@ class OrderComponent implements OnInit {
   //   try {
   //     await fakeHttpRequest(this.payload());
   //     form().reset();
-  //     return undefined;
-  //   } catch (error) {
-  //     return [{ kind: 'server', message: 'Submission failed, please try again later.' }];
+  //     return;
+  //   } catch (_error) {
+  //     const errors: TreeValidationResult = [
+  //       { kind: 'server', message: 'Submission failed, please try again later.' }
+  //     ];
+  //     return errors;
   //   }
   // }
 }
