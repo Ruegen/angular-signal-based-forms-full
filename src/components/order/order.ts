@@ -43,8 +43,8 @@ class OrderComponent implements OnInit {
     }));
   }
 
-  public onSubmit($event: Event) {
-    $event.preventDefault();
+  public onSubmit(event: SubmitEvent) {
+    event.preventDefault();
 
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
@@ -52,10 +52,10 @@ class OrderComponent implements OnInit {
     // console.log(this.orderForm.customerName().errors());
     // console.log(this.orderForm.quantity().errors());
 
-    if(this.orderForm().invalid()) {
-      alert('Form is invalid, please correct the errors and try again. errors: ' + JSON.stringify(this.orderForm().errors()));
-      return;
-    }
+    // if(this.orderForm().invalid()) {
+    //   alert('Form is invalid, please correct the errors and try again. errors: ' + JSON.stringify(this.orderForm().errors()));
+    //   return;
+    // }
 
     submit(this.orderForm, async (form): Promise<TreeValidationResult> => {
       try {
