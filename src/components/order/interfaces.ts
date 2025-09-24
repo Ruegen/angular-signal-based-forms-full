@@ -1,10 +1,11 @@
+import { IProduct, IUser } from "../../main-interfaces";
+
 interface IOrder {
     orderNumber: number;
-    customerName: string;
-    product: string;
-    productId: number;
+    customer: IUser | null;
+    product: IProduct | null;
     quantity: number;
-    deliveryDate: string;
+    deliveryDate: Date | null;
     notes: string;
 }
 

@@ -1,6 +1,6 @@
 import { customError, FieldPath, validate } from "@angular/forms/signals";
 
-const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, endDate: Date }): void => {
+const validateDateRange = (path: FieldPath<Date | null>, allowed: { startDate: Date, endDate: Date }): void => {
   validate(path, (ctx) => {
     const value = ctx.value();
     if(!value) {

@@ -1,8 +1,11 @@
 import { IOrder } from "../order/interfaces";
 
 function extractOrder(order: IOrder) {
-  const {deliveryDate, notes, quantity, productId} = order;
-  return {date: deliveryDate, notes, quantity, productId};
+  const {deliveryDate, notes, quantity, product} = order;
+  if(!product) {
+    throw new Error('Product is required to extract order');
+  }
+  return {date: deliveryDate, notes, quantity, productId: product.id};
 }
 
 export {extractOrder};

@@ -1,13 +1,14 @@
-import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
-import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field } from '@angular/forms/signals';
+import { Component, signal, computed, input, OnInit, WritableSignal, effect } from '@angular/core';
+import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field, property, applyWhen } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
+import { IProduct, IUser } from '../../main-interfaces';
 
 const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
-    apply(path.customerName, customerNameSchema);
+    apply(path.customer, customerNameSchema);
     min(path.quantity, 1, {message: 'Quantity must be at least 1'});
     validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
     validateNotes(path.notes, {minLength: 0, maxLength: 200});
@@ -18,29 +19,37 @@ const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
   styleUrl: './order.css',
   imports: [Control],
 })
-class OrderComponent implements OnInit {
-  customer = input({name: '', email: ''});
+class OrderComponent {
+  customer = input<IUser | null>(null);
+  product = input<IProduct | null>(null);
 
   order: WritableSignal<IOrder> = signal({
     orderNumber: 1,
-    customerName: '',
-    product: 'Foobar',
-    productId: 123,
+    customer: null,
+    product: null,
     quantity: 1,
-    deliveryDate: '',
+    deliveryDate: null,
     notes: '',
   });
 
   orderForm = form<IOrder>(this.order, orderschemaFn);
 
+  total = computed(() => {
+    const product = this.product();
+    const quantity = this.order().quantity;
+    return ((product?.price || 0) * quantity).toFixed(2);
+  });
   payload = computed(() => extractOrder(this.order()));
   disabled = computed(() => this.orderForm().submitting());
 
-  public ngOnInit() {
-    this.order.update((order) => ({
-      ...order,
-      customerName: this.customer().name,
-    }));
+  constructor() {
+    effect(() => {
+      this.order.update((order) => ({
+        ...order,
+        customer: this.customer(),
+        product: this.product(),
+      }));  
+    })
   }
 
   public onSubmit(event: SubmitEvent) {
