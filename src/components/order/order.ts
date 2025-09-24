@@ -1,5 +1,5 @@
 import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
-import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply } from '@angular/forms/signals';
+import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
@@ -57,7 +57,7 @@ class OrderComponent implements OnInit {
     //   return;
     // }
 
-    submit(this.orderForm, async (form): Promise<TreeValidationResult> => {
+    submit(this.orderForm, async (form) => {
       try {
         await fakeHttpRequest(this.payload());
         form().reset();
@@ -67,6 +67,16 @@ class OrderComponent implements OnInit {
       }
     })
   }
+
+  // public async action(form: Field<IOrder>): Promise<TreeValidationResult> {
+  //   try {
+  //     await fakeHttpRequest(this.payload());
+  //     form().reset();
+  //     return undefined;
+  //   } catch (error) {
+  //     return [{ kind: 'server', message: 'Submission failed, please try again later.' }];
+  //   }
+  // }
 }
 
 export { OrderComponent };
