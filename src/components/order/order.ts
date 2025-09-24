@@ -24,7 +24,7 @@ const orderschema: SchemaOrSchemaFn<IOrder> = (path) => {
   selector: 'app-order',
   templateUrl: './order.html',
   styleUrl: './order.css',
-  imports: [Control, DatePipe],
+  imports: [Control],
 })
 class OrderComponent implements OnInit {
   customer = input({name: '', email: ''});
