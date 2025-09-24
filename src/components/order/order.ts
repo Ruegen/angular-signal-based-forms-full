@@ -1,5 +1,5 @@
 import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
-import { form, Control, required, SchemaOrSchemaFn,  min, submit, TreeValidationResult, schema, apply } from '@angular/forms/signals';
+import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, schema, apply } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
@@ -43,7 +43,8 @@ class OrderComponent implements OnInit {
     })
   }
 
-  public onSubmit() {
+  public onSubmit($event: Event) {
+    $event.preventDefault();
     submit(this.orderForm, async (form): Promise<TreeValidationResult> => {
       try {
         await fakeHttpRequest(this.payload());
