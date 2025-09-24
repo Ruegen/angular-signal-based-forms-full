@@ -4,7 +4,6 @@
   <fieldset>
     <label for="quantity">Quantity: </label>
     <input id="quantity" type="number" [control]="orderForm.quantity" />
-
   </fieldset>
   @for (error of orderForm.quantity().errors(); track error) {
     @if(error.kind === 'required') {
@@ -13,6 +12,7 @@
       <p class="error">Quantity must be at least 1</p>
     }
   }
+
   <fieldset>
     <label for="delivery-date">Delivery Date: </label>
     <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" />
@@ -26,6 +26,7 @@
         }
       }
   </fieldset>
+  
   <fieldset>
     <label for="notes">Notes: </label>
     <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>
