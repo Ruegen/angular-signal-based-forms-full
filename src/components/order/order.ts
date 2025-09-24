@@ -20,7 +20,6 @@ const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
 })
 class OrderComponent implements OnInit {
   customer = input({name: '', email: ''});
-  name = 'Angular';
 
   order: WritableSignal<IOrder> = signal({
     orderNumber: 1,
