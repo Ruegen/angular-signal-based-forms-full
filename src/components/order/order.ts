@@ -1,7 +1,6 @@
 import { Component, signal, computed, input, OnInit, WritableSignal } from '@angular/core';
 import { form, Control, required, SchemaOrSchemaFn,  min, FieldPath, validate, customError, ChildFieldContext, FieldValidationResult } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
-import { DatePipe } from '@angular/common';
 
 interface IOrder {
     orderNumber: number;
