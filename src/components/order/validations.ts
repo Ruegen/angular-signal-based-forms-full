@@ -5,8 +5,9 @@ const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, 
     const value = ctx.value();
     if(!value) {
       return customError({
-        kind: 'validateDateRange',
+        kind: 'missingDate',
         value,
+        message: 'Missing date',
         allowed,
       });
     }
@@ -19,6 +20,7 @@ const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, 
       return customError({
         kind: 'dateTooLate',
         value,
+        message: 'Date must be within 3 months from today.',
         allowed: maxDate.toISOString().split('T')[0],
       });
     } 
@@ -27,6 +29,7 @@ const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, 
       return customError({
         kind: 'dateTooEarly',
         value,
+        message: 'Date must be from today onwards.',
         allowed: currentDate.toISOString().split('T')[0],
       });
     }

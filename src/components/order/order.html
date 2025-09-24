@@ -1,7 +1,8 @@
 <form class="order-form" (submit)="onSubmit($event)">
 
-  <p>Order Number: {{order().orderNumber}} - {{order().customerName}}</p>
-  <p>Product: {{order().product}}</p>
+  <p><strong>Order Number:</strong> {{order().orderNumber}}</p>
+  <p><strong>Customer:</strong> {{customer().name}}</p>
+  <p><strong>Product:</strong> {{order().product}}</p>
   <fieldset>
     <label for="quantity">Quantity: </label>
     <input id="quantity" type="number" [control]="orderForm.quantity" />
@@ -18,16 +19,11 @@
   <fieldset>
     <label for="delivery-date">Delivery Date: </label>
     <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" />
-      @for (error of orderForm.deliveryDate().errors(); track error) {
-        @if(error.kind === 'validateDateRange') {
-          <p class="error">Delivery date is required</p>
-        } @else if (error.kind === 'dateTooEarly') {
-        <p class="error">Delivery date must be after</p>
-        } @else if (error.kind === 'dateTooLate') {
-        <p class="error">Delivery date must be within the next 30 days</p>
-        }
-      }
   </fieldset>
+
+   @for (error of orderForm.deliveryDate().errors(); track error) {
+    <p class="error">{{error.message}}</p>
+   }
 
   <fieldset>
     <label for="notes">Notes: </label>
