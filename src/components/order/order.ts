@@ -4,12 +4,13 @@ import { validateDateRange, validateNotes } from './validations';
 import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
+import { extractOrder } from '../helpers/extract-order';
 
 const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
     apply(path.customerName, customerNameSchema);
     min(path.quantity, 1, {message: 'Quantity must be at least 1'});
     validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
-    validateNotes(path.notes, {minLength: 10, maxLength: 200});
+    validateNotes(path.notes, {minLength: 0, maxLength: 200});
 }
 @Component({
   selector: 'app-order',
@@ -33,19 +34,29 @@ class OrderComponent implements OnInit {
 
   orderForm = form<IOrder>(this.order, orderschemaFn);
 
-  payload = computed(() => {
-    const {deliveryDate, notes, quantity, productId} = this.order();
-    return {date: deliveryDate, notes, quantity, productId};
-  });
+  payload = computed(() => extractOrder(this.order()));
 
   public ngOnInit() {
-    this.order.update((o) => {
-      return {...o, customerName: this.customer().name};
-    })
+    this.order.update((order) => ({
+      ...order,
+      customerName: this.customer().name,
+    }));
   }
 
   public onSubmit($event: Event) {
     $event.preventDefault();
+
+    // console.log(this.orderForm().invalid());
+    // console.log(this.orderForm.deliveryDate().errors());
+    // console.log(this.orderForm.notes().errors());
+    // console.log(this.orderForm.customerName().errors());
+    // console.log(this.orderForm.quantity().errors());
+
+    if(this.orderForm().invalid()) {
+      alert('Form is invalid, please correct the errors and try again. errors: ' + JSON.stringify(this.orderForm().errors()));
+      return;
+    }
+
     submit(this.orderForm, async (form): Promise<TreeValidationResult> => {
       try {
         await fakeHttpRequest(this.payload());

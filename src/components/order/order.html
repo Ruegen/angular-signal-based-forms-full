@@ -1,7 +1,5 @@
 <form class="order-form" (submit)="onSubmit($event)">
-  @if(orderForm().submitting()) {
-    <p>Submitting...</p>
-  } 
+
   <p>Order Number: {{order().orderNumber}} - {{order().customerName}}</p>
   <p>Product: {{order().product}}</p>
   <fieldset>
@@ -36,5 +34,8 @@
     <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>
   </fieldset>
 
-  <button type="submit">Submit Order</button>
+  <button type="submit" [disabled]="orderForm().submitting()">Submit Order</button>
+  @if (orderForm().submitting()) {
+    <span class="loading-indicator">Sending order please wait...</span>
+  }
 </form>

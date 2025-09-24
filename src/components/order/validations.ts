@@ -3,6 +3,13 @@ import { customError, FieldPath, validate } from "@angular/forms/signals";
 const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, endDate: Date }): void => {
   validate(path, (ctx) => {
     const value = ctx.value();
+    if(!value) {
+      return customError({
+        kind: 'validateDateRange',
+        value,
+        allowed,
+      });
+    }
     const date = new Date(value);
     const currentDate = new Date(allowed.startDate);
     const maxDate = new Date(allowed.endDate);
@@ -24,11 +31,7 @@ const validateDateRange = (path: FieldPath<string>, allowed: { startDate: Date, 
       });
     }
 
-    return customError({
-      kind: 'validateDateRange',
-      value,
-      allowed,
-    });
+    return null
   })
 };
 
