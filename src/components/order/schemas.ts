@@ -1,5 +1,5 @@
 import { customError, FieldState, FieldValidationResult, FieldValidator, required, RootFieldContext, schema, validate, ValidationError } from "@angular/forms/signals";
-import { IUser } from "../../main-interfaces";
+import { IUser } from "../../global-interfaces";
 
 const customerNameSchema = schema<IUser | null>((path) => {
     required(path, {message: 'Customer name is required'});

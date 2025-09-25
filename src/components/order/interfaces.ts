@@ -1,4 +1,4 @@
-import { IProduct, IUser } from "../../main-interfaces";
+import { IProduct, IUser } from "../../global-interfaces";
 
 interface IOrder {
     orderNumber: number;
@@ -6,6 +6,7 @@ interface IOrder {
     product: IProduct | null;
     quantity: number;
     deliveryDate: Date | null;
+    special: string | null;
     notes: string;
 }
 

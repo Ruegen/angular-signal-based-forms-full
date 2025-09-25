@@ -1,18 +1,12 @@
-import { Component, signal, computed, input, OnInit, WritableSignal, effect } from '@angular/core';
-import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field, property, applyWhen } from '@angular/forms/signals';
+import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal } from '@angular/core';
+import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field, property, applyWhen, validate, validateAsync, disabled, RootFieldContext, validateHttp, ValidationResult, FieldState, ChildFieldContext, AggregateProperty } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
-import { IProduct, IUser } from '../../main-interfaces';
+import { IProduct, IUser } from '../../global-interfaces';
 
-const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
-    apply(path.customer, customerNameSchema);
-    min(path.quantity, 1, {message: 'Quantity must be at least 1'});
-    validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
-    validateNotes(path.notes, {minLength: 0, maxLength: 200});
-}
 @Component({
   selector: 'app-order',
   templateUrl: './order.html',
@@ -22,6 +16,7 @@ const orderschemaFn: SchemaOrSchemaFn<IOrder> = (path) => {
 class OrderComponent {
   customer = input<IUser | null>(null);
   product = input<IProduct | null>(null);
+  
 
   order: WritableSignal<IOrder> = signal({
     orderNumber: 1,
@@ -29,10 +24,45 @@ class OrderComponent {
     product: null,
     quantity: 1,
     deliveryDate: null,
+    special: null,
     notes: '',
   });
 
-  orderForm = form<IOrder>(this.order, orderschemaFn);
+  orderForm = form<IOrder>(this.order, (path) => {
+    
+    min(path.quantity, 1, {message: 'Quantity must be at least 1'});
+    validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
+    validateNotes(path.notes, {minLength: 0, maxLength: 200});
+
+    disabled(path.deliveryDate, () => {
+      const submitting = this.orderForm().submitting();
+      if(submitting) {
+        return true;
+      }
+      
+      return false
+    })
+
+    disabled(path.notes, () => {
+      const submitting = this.orderForm().submitting();
+      if(submitting) {
+        return true;
+      }
+      
+      return false
+    })
+
+    disabled(path.quantity, () => {
+      const submitting = this.orderForm().submitting();
+      if(submitting) {
+        return true;
+      }
+      
+      return false
+    })
+    
+    apply(path.customer, customerNameSchema);
+});
 
   total = computed(() => {
     const product = this.product();

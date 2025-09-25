@@ -1,11 +1,10 @@
 <form class="order-form" (submit)="onSubmit($event)">
-
   <p><strong>Order Number:</strong> {{order().orderNumber}}</p>
   <p><strong>Customer:</strong> {{customer()?.name}}</p>
   <p><strong>Product:</strong> {{order().product?.name}}</p>
   <fieldset>
     <label for="quantity">Quantity: </label>
-    <input id="quantity" type="number" [control]="orderForm.quantity" [disabled]="disabled()" />
+    <input id="quantity" type="number" [control]="orderForm.quantity"/>
   </fieldset>
 
   @for (error of orderForm.quantity().errors(); track error) {
@@ -18,7 +17,7 @@
 
   <fieldset>
     <label for="delivery-date">Delivery Date: </label>
-    <input id="delivery-date" type="date" [control]="orderForm.deliveryDate" [disabled]="disabled()" />
+    <input id="delivery-date" type="date" [control]="orderForm.deliveryDate"/>
   </fieldset>
 
    @for (error of orderForm.deliveryDate().errors(); track error) {
@@ -27,7 +26,7 @@
 
   <fieldset>
     <label for="notes">Notes: </label>
-    <textarea id="notes" cols="30" [control]="orderForm.notes" [disabled]="disabled()"></textarea>
+    <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>
   </fieldset>
 
   <p><strong>Total: </strong>€{{total()}}</p>

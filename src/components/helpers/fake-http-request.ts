@@ -1,4 +1,4 @@
-function fakeHttpRequest(payload: any, fail = false) {
+function fakeHttpRequest(payload: any, fail = false): Promise<boolean> {
   console.log('Sending payload', payload);
   return new Promise((resolve, reject) => {
     if (fail) {
