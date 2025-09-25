@@ -1,10 +1,11 @@
-import { Component, signal, computed, input, WritableSignal, effect } from '@angular/core';
-import { form, Control, min, submit, TreeValidationResult, apply, disabled } from '@angular/forms/signals';
+import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal, resource, ResourceOptions } from '@angular/core';
+import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
-import { customerNameSchema } from './schemas';
+import { customerNameSchema, schemaProductRef } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
 import { IProduct, IUser, IOrder } from '../../global-interfaces';
+import { fakeHttpProductCheck } from '../helpers/fake-http-product-check';
 
 @Component({
   selector: 'app-order',
@@ -40,6 +41,12 @@ class OrderComponent {
     disabled(path.deliveryDate, () => this.orderForm().submitting())
     disabled(path.notes, () => this.orderForm().submitting())
     disabled(path.quantity, () => this.orderForm().submitting())
+    
+
+
+
+    // validateAsync(path.product, schemaProductRef);
+
 
     apply(path.customer, customerNameSchema);
 });
@@ -78,6 +85,7 @@ class OrderComponent {
 
     submit(this.orderForm, async (form) => {
       try {
+        console.log('now sending order', this.payload());
         await fakeHttpRequest(this.payload());
         form().reset();
         return;

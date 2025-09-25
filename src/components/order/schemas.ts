@@ -1,5 +1,7 @@
-import { customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, validate, ValidationError } from "@angular/forms/signals";
-import { IUser, IOrder } from "../../global-interfaces";
+import { AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
+import { IUser, IOrder, IProduct } from "../../global-interfaces";
+import { resource, ResourceRef, Signal, signal } from "@angular/core";
+import { fakeHttpProductCheck } from "../helpers/fake-http-product-check";
 
 const customerNameSchema = schema<IUser | null>((path) => {
     required(path, {message: 'Customer name is required'});
@@ -39,4 +41,35 @@ function disableAll(callback: () => boolean): Schema<IOrder> {
 // 	})
 // }
 
-export {customerNameSchema, disableAll}
+const schemaProductRef: AsyncValidatorOptions<IProduct | null, any, any> = {
+	params: (ctx: RootFieldContext<IProduct | null>) => {
+		const productId: string | undefined = ctx.value()?.id;
+		return productId
+	},
+	factory: (productId: Signal<string | undefined>): ResourceRef<any> => {
+	return resource({
+			// Define a reactive computation.
+			// The params value recomputes whenever any read signals change.
+			params: () => productId(),
+			// Define an async loader that retrieves data.
+			// The resource calls this function every time the `params` value changes.
+			loader: async (resource) => fakeHttpProductCheck(resource.params),
+		})
+	},
+	errors: (valid: boolean, ctx: RootFieldContext<IProduct | null>): TreeValidationResult => {
+		console.log('product valid?', valid);
+
+		if(valid) {
+			return null;
+		}
+		return customError({
+			kind: 'resource',
+			message: 'Product information could not be validated, please try again later.',
+		});
+	}
+};
+
+
+
+
+export {customerNameSchema, disableAll, schemaProductRef}
