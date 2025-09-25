@@ -1,11 +1,10 @@
-import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal } from '@angular/core';
-import { form, Control, SchemaOrSchemaFn,  min, submit, TreeValidationResult, apply, Field, property, applyWhen, validate, validateAsync, disabled, RootFieldContext, validateHttp, ValidationResult, FieldState, ChildFieldContext, AggregateProperty } from '@angular/forms/signals';
+import { Component, signal, computed, input, WritableSignal, effect } from '@angular/core';
+import { form, Control, min, submit, TreeValidationResult, apply, disabled } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
-import { IOrder } from './interfaces';
 import { customerNameSchema } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
-import { IProduct, IUser } from '../../global-interfaces';
+import { IProduct, IUser, IOrder } from '../../global-interfaces';
 
 @Component({
   selector: 'app-order',
@@ -34,33 +33,14 @@ class OrderComponent {
     validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
     validateNotes(path.notes, {minLength: 0, maxLength: 200});
 
-    disabled(path.deliveryDate, () => {
-      const submitting = this.orderForm().submitting();
-      if(submitting) {
-        return true;
-      }
-      
-      return false
-    })
+    // apply(path, disableAll(() => this.orderForm().submitting()));
+    // const fields: Array<keyof IOrder> = ['deliveryDate', 'notes', 'quantity'];
+    // apply(path, disableAll<IOrder>(fields, () => this.orderForm().submitting()));
 
-    disabled(path.notes, () => {
-      const submitting = this.orderForm().submitting();
-      if(submitting) {
-        return true;
-      }
-      
-      return false
-    })
+    disabled(path.deliveryDate, () => this.orderForm().submitting())
+    disabled(path.notes, () => this.orderForm().submitting())
+    disabled(path.quantity, () => this.orderForm().submitting())
 
-    disabled(path.quantity, () => {
-      const submitting = this.orderForm().submitting();
-      if(submitting) {
-        return true;
-      }
-      
-      return false
-    })
-    
     apply(path.customer, customerNameSchema);
 });
 

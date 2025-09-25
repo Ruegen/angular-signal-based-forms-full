@@ -1,4 +1,4 @@
-import { IOrder } from "../order/interfaces";
+import { IOrder } from "../../global-interfaces";
 
 function extractOrder(order: IOrder) {
   const {deliveryDate, notes, quantity, product} = order;

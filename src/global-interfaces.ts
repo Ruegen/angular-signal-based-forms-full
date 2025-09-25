@@ -1,3 +1,4 @@
+
 interface IUser {
     id: string;
     name: string;
@@ -14,4 +15,16 @@ interface IProduct {
     price: number;
 }
 
-export { IUser, IProduct }
+interface IOrder {
+    orderNumber: number;
+    customer: IUser | null;
+    product: IProduct | null;
+    quantity: number;
+    deliveryDate: Date | null;
+    special: string | null;
+    notes: string;
+}
+
+
+
+export { IUser, IProduct, IOrder }

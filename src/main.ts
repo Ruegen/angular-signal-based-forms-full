@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { OrderComponent } from './components/order/order';
 import { IProduct, IUser } from './global-interfaces';
+// import { OrderDemoComponent } from './components/order-demo/order-demo';
 
 @Component({
   selector: 'app-root',

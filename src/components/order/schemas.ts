@@ -1,5 +1,5 @@
-import { customError, FieldState, FieldValidationResult, FieldValidator, required, RootFieldContext, schema, validate, ValidationError } from "@angular/forms/signals";
-import { IUser } from "../../global-interfaces";
+import { customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, validate, ValidationError } from "@angular/forms/signals";
+import { IUser, IOrder } from "../../global-interfaces";
 
 const customerNameSchema = schema<IUser | null>((path) => {
     required(path, {message: 'Customer name is required'});
@@ -22,4 +22,21 @@ const customerNameSchema = schema<IUser | null>((path) => {
 	})
 });
 
-export {customerNameSchema}
+
+function disableAll(callback: () => boolean): Schema<IOrder> {
+	return schema((path) => {
+		disabled(path.deliveryDate, () => callback())
+		disabled(path.notes, () => callback())
+		disabled(path.quantity, () => callback())
+	})
+}
+
+// function disableAll<CustomPath>(list: Array<keyof CustomPath>, callback: () => boolean): Schema<CustomPath> {
+// 	return schema<CustomPath>((path: FieldPath<CustomPath>) => {
+// 		list.forEach((field: keyof CustomPath) => {
+// 			disabled((path as any)[field], () => callback())
+// 		})
+// 	})
+// }
+
+export {customerNameSchema, disableAll}
