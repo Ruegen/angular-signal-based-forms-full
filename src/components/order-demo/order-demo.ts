@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IProduct, IUser } from '../../global-interfaces';
 import { JsonPipe } from '@angular/common';
 
@@ -6,6 +6,7 @@ import { JsonPipe } from '@angular/common';
   selector: 'app-order-demo',
   templateUrl: './order-demo.html',
   styleUrl: './order-demo.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [JsonPipe],
 })
 class OrderDemoComponent {

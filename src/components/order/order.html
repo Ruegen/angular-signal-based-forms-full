@@ -20,8 +20,10 @@
     <input id="delivery-date" type="date" [control]="orderForm.deliveryDate"/>
   </fieldset>
 
-   @for (error of orderForm.deliveryDate().errors(); track error) {
-    <p class="error">{{error.message}}</p>
+   @if(orderForm().dirty()) {
+    @for (error of orderForm.deliveryDate().errors(); track error) {
+      <p class="error">{{error.message}}</p>
+    }
    }
 
   <fieldset>
