@@ -18,7 +18,6 @@ class OrderComponent {
   customer = input<IUser | null>(null);
   product = input<IProduct | null>(null);
   
-
   order: WritableSignal<IOrder> = signal({
     orderNumber: 1,
     customer: null,
@@ -78,7 +77,7 @@ class OrderComponent {
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
     // console.log(this.orderForm.notes().errors());
-    // console.log(this.orderForm.customerName().errors());
+    // console.log(this.orderForm.customer().errors());
     // console.log(this.orderForm.quantity().errors());
 
     // if(this.orderForm().invalid()) {
@@ -88,7 +87,7 @@ class OrderComponent {
 
     submit(this.orderForm, async (form) => {
       try {
-        console.log('now sending order', this.payload());
+        // console.log('now sending order', this.payload());  
         await fakeHttpRequest(this.payload());
         form().reset();
         return;
