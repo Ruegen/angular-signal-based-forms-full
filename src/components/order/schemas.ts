@@ -1,4 +1,4 @@
-import { AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
+import { applyWhen, AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
 import { IUser, IOrder, IProduct } from "../../global-interfaces";
 import { resource, ResourceRef, Signal, signal } from "@angular/core";
 import { fakeHttpProductCheck } from "../helpers/fake-http-product-check";
@@ -24,12 +24,41 @@ const customerNameSchema = schema<IUser | null>((path) => {
 	})
 });
 
+const orderSpecialSchema = schema<IOrder>((path) => {
+
+	validate(path.special, (ctx) => {
+		const value = ctx.value() ?? '';
+		const codes = ['SPECIAL10']
+		if(value && !codes.includes(value)) {
+			return customError({
+				kind: 'invalidSpecialCode',
+				message: `The special code "${value}" is not valid.`,
+				allowed: codes,
+			})
+		}
+		return null;
+	})
+
+	required(path.special, {
+		message: 'Special code does not apply to this product, please remove it.',
+		when: ({valueOf}) => {
+		const value = valueOf(path.special) ?? '';
+		if(!value) {
+			return false
+		}
+		const productIds: Array<string> = ['p1q2r3s5', 'x9y8z7w6'];
+		return !productIds.includes(value);
+	}});
+
+});
+
 
 function disableAll(callback: () => boolean): Schema<IOrder> {
 	return schema((path) => {
 		disabled(path.deliveryDate, () => callback())
 		disabled(path.notes, () => callback())
 		disabled(path.quantity, () => callback())
+		disabled(path.special, () => callback())
 	})
 }
 
@@ -72,4 +101,4 @@ const schemaProductRef: AsyncValidatorOptions<IProduct | null, any, any> = {
 
 
 
-export {customerNameSchema, disableAll, schemaProductRef}
+export {customerNameSchema, disableAll, schemaProductRef, orderSpecialSchema}

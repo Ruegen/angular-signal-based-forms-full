@@ -9,9 +9,9 @@
 
   @for (error of orderForm.quantity().errors(); track error) {
     @if(error.kind === 'required') {
-      <p class="error">Quantity is required</p>
+      <p class="error">{{error.message}}</p>
     } @else if (error.kind === 'min') {
-      <p class="error">Quantity must be at least 1</p>
+      <p class="error">{{error.message}}</p>
     }
   }
 
@@ -31,6 +31,19 @@
     <textarea id="notes" cols="30" [control]="orderForm.notes"></textarea>
   </fieldset>
 
+  <fieldset>
+    <label for="special">Discount Special Code: </label>
+    <input id="special" type="text" [control]="orderForm.special"/>
+  </fieldset>
+
+    @for (error of orderForm.special().errors(); track error) {
+      @if(error.kind === 'required') {
+        <p class="error">{{error.message}}</p>
+      } @else if (error.kind === 'invalidSpecialCode') {
+        <p class="error">{{error.message}}</p>
+      } 
+    }
+  
   <p><strong>Total: </strong>€{{total()}}</p>
 
   <div class="submit-area">

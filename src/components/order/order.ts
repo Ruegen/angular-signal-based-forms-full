@@ -1,7 +1,7 @@
 import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal, resource, ResourceOptions, ChangeDetectionStrategy } from '@angular/core';
 import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError, validate } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
-import { customerNameSchema, schemaProductRef } from './schemas';
+import { customerNameSchema, orderSpecialSchema, schemaProductRef } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
 import { IProduct, IUser, IOrder } from '../../global-interfaces';
@@ -42,9 +42,10 @@ class OrderComponent {
     disabled(path.deliveryDate, () => this.orderForm().submitting())
     disabled(path.notes, () => this.orderForm().submitting())
     disabled(path.quantity, () => this.orderForm().submitting())
+    disabled(path.special, () => this.orderForm().submitting())
 
     
-
+    // apply(path, orderSpecialSchema);
 
 
     // validateAsync(path.product, schemaProductRef);
