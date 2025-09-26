@@ -41,7 +41,7 @@ export class App {
 
   product: IProduct = {
     id: 'p1q2r3s4',
-    name: 'Wrestlemaina Figurine',
+    name: 'WrestleMania Figurine',
     description: 'A figurine of a famous wrestler.',
     price: 29.99,
   }
