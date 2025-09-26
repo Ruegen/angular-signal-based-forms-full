@@ -5,7 +5,12 @@
   <fieldset>
     <label for="quantity">Quantity: </label>
     <input id="quantity" type="number" [control]="orderForm.quantity"/>
+    <div class="button-group">
+      <button (click)="decrease()">-</button>
+      <button (click)="increase()">+</button>
+    </div>
   </fieldset>
+
 
   @for (error of orderForm.quantity().errors(); track error) {
     @if(error.kind === 'required') {

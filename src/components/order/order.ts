@@ -1,5 +1,5 @@
 import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal, resource, ResourceOptions, ChangeDetectionStrategy } from '@angular/core';
-import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError, validate } from '@angular/forms/signals';
+import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError, validate, Field } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { customerNameSchema, orderSpecialSchema, schemaProductRef } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
@@ -46,11 +46,10 @@ class OrderComponent {
     
     // apply(path, orderSpecialSchema);
 
-
-    // validateAsync(path.product, schemaProductRef);
-
-
     apply(path.customer, customerNameSchema);
+    
+    // Async validation for a field only runs once all synchronous validation is passing. 
+    // validateAsync(path.product, schemaProductRef);
 });
 
   total = computed(() => {
@@ -74,6 +73,7 @@ class OrderComponent {
   public onSubmit(event: SubmitEvent) {
     event.preventDefault();
 
+
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
     // console.log(this.orderForm.notes().errors());
@@ -85,7 +85,10 @@ class OrderComponent {
     //   return;
     // }
 
-    submit(this.orderForm, async (form) => {
+    submit(this.orderForm, async (form: Field<IOrder>) => {
+      console.log(this.orderForm().controls())
+      
+
       try {
         // console.log('now sending order', this.payload());  
         await fakeHttpRequest(this.payload());
@@ -98,6 +101,20 @@ class OrderComponent {
         return errors;
       }
     })
+  }
+
+  public increase() {
+    this.order.update((oder) => ({
+      ...oder,
+      quantity: oder.quantity + 1
+    }))
+  }
+
+  public decrease() {
+    this.order.update((oder) => ({
+      ...oder,
+      quantity: oder.quantity - 1
+    }))
   }
 
   // public async action(form: Field<IOrder>): Promise<TreeValidationResult> {

@@ -49,3 +49,14 @@
 	justify-content: flex-end;
 	gap: 1em;
 }
+.order-form .button-group {
+	margin-top: 2px;
+	display: flex;
+	justify-content: flex-start;
+	gap: 1em;
+	margin-bottom: 1em;
+}
+
+.order-form .button-group>button {
+	min-width: 2em;
+}
