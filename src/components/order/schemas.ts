@@ -99,6 +99,4 @@ const schemaProductRef: AsyncValidatorOptions<IProduct | null, any, any> = {
 };
 
 
-
-
 export {customerNameSchema, disableAll, schemaProductRef, orderSpecialSchema}
