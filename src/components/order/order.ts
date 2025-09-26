@@ -6,13 +6,14 @@ import { fakeHttpRequest } from '../helpers/fake-http-request';
 import { extractOrder } from '../helpers/extract-order';
 import { IProduct, IUser, IOrder } from '../../global-interfaces';
 import { fakeHttpProductCheck } from '../helpers/fake-http-product-check';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.html',
   styleUrl: './order.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Control],
+  imports: [JsonPipe, Control],
 })
 class OrderComponent {
   customer = input<IUser | null>(null);

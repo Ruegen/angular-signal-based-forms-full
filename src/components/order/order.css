@@ -60,3 +60,6 @@
 .order-form .button-group>button {
 	min-width: 2em;
 }
+.order-form code {
+	color: #ccc;
+}
