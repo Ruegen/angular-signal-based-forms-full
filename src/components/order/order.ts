@@ -1,5 +1,5 @@
 import { Component, signal, computed, input, WritableSignal, effect, ResourceRef, Signal, resource, ResourceOptions, ChangeDetectionStrategy } from '@angular/core';
-import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError, validate, Field } from '@angular/forms/signals';
+import { form, Control, min, submit, TreeValidationResult, apply, disabled, validateAsync, AsyncValidatorOptions, RootFieldContext, customError, validate, Field, validateStandardSchema, applyEach, schema, FieldPath } from '@angular/forms/signals';
 import { validateDateRange, validateNotes } from './validations';
 import { customerNameSchema, orderSpecialSchema, schemaProductRef } from './schemas';
 import { fakeHttpRequest } from '../helpers/fake-http-request';
@@ -74,7 +74,6 @@ class OrderComponent {
   public onSubmit(event: SubmitEvent) {
     event.preventDefault();
 
-
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
     // console.log(this.orderForm.notes().errors());
@@ -105,10 +104,7 @@ class OrderComponent {
   }
 
   public increase() {
-    this.order.update((oder) => ({
-      ...oder,
-      quantity: oder.quantity + 1
-    }))
+    this.orderForm.quantity().value.update((oder) => (oder + 1));
   }
 
   public decrease() {
