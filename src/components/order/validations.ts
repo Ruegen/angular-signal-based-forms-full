@@ -1,4 +1,4 @@
-import { customError, FieldPath, validate } from "@angular/forms/signals";
+import { customError, FieldPath, maxLength, maxLengthError, minLengthError, validate } from "@angular/forms/signals";
 
 const validateDateRange = (path: FieldPath<Date | null>, allowed: { startDate: Date, endDate: Date }): void => {
   validate(path, (ctx) => {
@@ -38,22 +38,14 @@ const validateDateRange = (path: FieldPath<Date | null>, allowed: { startDate: D
   })
 };
 
-const validateNotes = (path: FieldPath<string>, allowed: { minLength: number, maxLength: number }): void => {
+const validateNotes = (path: FieldPath<string>, {minLength, maxLength}: { minLength: number, maxLength: number }): void => {
   validate(path, (ctx) => {
     const value = ctx.value();
-    if (value && value.length < allowed.minLength) {
-      return customError({
-        kind: 'minLength',
-        value,
-        allowed: allowed.minLength,
-      });
+    if (value && value.length < minLength) {
+      return minLengthError(minLength);
     }
-    if (value && value.length > allowed.maxLength) {
-      return customError({
-        kind: 'maxLength',
-        value,
-        allowed,
-      });
+    if (value && value.length > maxLength) {
+      return maxLengthError(maxLength);
     }
     return null;
   })
