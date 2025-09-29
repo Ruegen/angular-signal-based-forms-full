@@ -74,6 +74,8 @@ class OrderComponent {
   public onSubmit(event: SubmitEvent) {
     event.preventDefault();
 
+    console.log(this.orderForm())
+
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
     // console.log(this.orderForm.notes().errors());

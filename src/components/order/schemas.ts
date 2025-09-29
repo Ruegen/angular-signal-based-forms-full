@@ -1,4 +1,4 @@
-import { applyWhen, AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
+import { applyWhen, AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, requiredError, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
 import { IUser, IOrder, IProduct } from "../../global-interfaces";
 import { resource, ResourceRef, Signal, signal } from "@angular/core";
 import { fakeHttpProductCheck } from "../helpers/fake-http-product-check";
@@ -11,7 +11,7 @@ const customerNameSchema = schema<IUser | null>((path) => {
 	validate(path, (ctx: RootFieldContext<IUser | null>): FieldValidationResult<ValidationError> => {
 	  const customer: IUser | null = ctx.value();
 	  if (customer === null) { 
-		  return customError({kind: 'required', message: 'Customer is required'});
+		  return requiredError({message: 'Customer is required'});
 	  }
 	  if (bannedNames.includes(customer.name)) {
 		return customError({
