@@ -44,6 +44,7 @@ class OrderComponent {
     disabled(path.quantity, () => this.orderForm().submitting())
     disabled(path.special, () => this.orderForm().submitting())
 
+
     
     // apply(path, orderSpecialSchema);
 
@@ -53,7 +54,7 @@ class OrderComponent {
     // validateAsync(path.product, schemaProductRef);
 });
 
-  total = computed(() => {
+  total = computed((): string => {
     const product = this.product();
     const quantity = this.order().quantity;
     return ((product?.price || 0) * quantity).toFixed(2);
@@ -105,14 +106,14 @@ class OrderComponent {
     })
   }
 
-  public increase() {
-    this.orderForm.quantity().value.update((oder) => (oder + 1));
+  public increase():void {
+    this.orderForm.quantity().value.update((quantity) => (quantity + 1));
   }
 
-  public decrease() {
-    this.order.update((oder) => ({
-      ...oder,
-      quantity: oder.quantity - 1
+  public decrease():void {
+    this.order.update((order) => ({
+      ...order,
+      quantity: order.quantity - 1
     }))
   }
 

@@ -1,9 +1,9 @@
-import { applyWhen, AsyncValidatorOptions, customError, disabled, FieldValidationResult, required, requiredError, RootFieldContext, Schema, schema, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
+import { applyWhen, AsyncValidatorOptions, customError, disabled, FieldPath, FieldValidationResult, required, requiredError, RootFieldContext, Schema, schema, SchemaFn, TreeValidationResult, validate, ValidationError } from "@angular/forms/signals";
 import { IUser, IOrder, IProduct } from "../../global-interfaces";
 import { resource, ResourceRef, Signal, signal } from "@angular/core";
 import { fakeHttpProductCheck } from "../helpers/fake-http-product-check";
 
-const customerNameSchema = schema<IUser | null>((path) => {
+const customerNameSchema = schema<IUser | null>((path: FieldPath<IUser | null>) => {
     required(path, {message: 'Customer name is required'});
     
 	const bannedNames = ['Admin', 'Root', 'Null'];
@@ -24,7 +24,7 @@ const customerNameSchema = schema<IUser | null>((path) => {
 	})
 });
 
-const orderSpecialSchema = schema<IOrder>((path) => {
+const orderSpecialSchema = schema<IOrder>((path: FieldPath<IOrder>) => {
 
 	validate(path.special, (ctx) => {
 		const value = ctx.value() ?? '';
@@ -54,7 +54,7 @@ const orderSpecialSchema = schema<IOrder>((path) => {
 
 
 function disableAll(callback: () => boolean): Schema<IOrder> {
-	return schema((path) => {
+	return schema((path: FieldPath<IOrder>) => {
 		disabled(path.deliveryDate, () => callback())
 		disabled(path.notes, () => callback())
 		disabled(path.quantity, () => callback())
@@ -75,7 +75,7 @@ const schemaProductRef: AsyncValidatorOptions<IProduct | null, any, any> = {
 		const productId: string | undefined = ctx.value()?.id;
 		return productId
 	},
-	factory: (productId: Signal<string | undefined>): ResourceRef<any> => {
+	factory: (productId: Signal<string | undefined>): ResourceRef<boolean | undefined> => {
 	return resource({
 			// Define a reactive computation.
 			// The params value recomputes whenever any read signals change.
