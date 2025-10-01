@@ -29,7 +29,7 @@ class OrderComponent {
     notes: '',
   });
 
-  orderForm = form<IOrder>(this.order, (path) => {
+  orderForm = form<IOrder>(this.order, (path: FieldPath<IOrder>): void => {
     
     min(path.quantity, 1, {message: 'Quantity must be at least 1'});
     validateDateRange(path.deliveryDate, {startDate: new Date(), endDate: new Date()});
@@ -75,7 +75,7 @@ class OrderComponent {
   public onSubmit(event: SubmitEvent) {
     event.preventDefault();
 
-    console.log(this.orderForm())
+    // console.log(this.orderForm())
 
     // console.log(this.orderForm().invalid());
     // console.log(this.orderForm.deliveryDate().errors());
